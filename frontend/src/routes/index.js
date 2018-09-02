@@ -15,9 +15,9 @@ class Routes extends React.Component {
       <Provider store={store}>
         <Router history={history}>
           <div>
-            <Route path="/" component={CityMap}/>
-            <Route path="/login" component={Login} />
-            <Route path="/registration" component={Registration} />
+            <Route exact path="/" component={CityMap}/>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/registration" component={Registration} />
           </div>
         </Router>
       </Provider>
