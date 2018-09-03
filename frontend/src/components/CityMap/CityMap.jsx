@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { YMaps, Map, Placemark } from 'react-yandex-maps';
 import './styles.sass';
 const mapState = {
@@ -7,7 +7,7 @@ const mapState = {
   zoom: 12
 };
 
-class CityMap extends Component {
+class CityMap extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +28,7 @@ class CityMap extends Component {
   render() {
     return (
       <YMaps>
-        <Map state={mapState} height="100vh" width="100vw">
+        <Map state={mapState} height="100%" width="100%" onClick={this.clickHandler}>
           {this.state.points.map(point => (
             <Placemark
               key={point.id}
