@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { YMaps, Map, Placemark } from 'react-yandex-maps';
 import './styles.sass';
 import { Field, reduxForm } from 'redux-form';
@@ -30,7 +30,7 @@ const eventsTypeOptions = [
   }
 ];
 
-class CityMap extends Component {
+class CityMap extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
