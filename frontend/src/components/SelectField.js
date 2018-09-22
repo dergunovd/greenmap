@@ -4,7 +4,7 @@ import { Icon, Select } from 'semantic-ui-react';
 
 const InputField = ({ meta: { touched, error }, ...restProps }) => (
   <div>
-    <Select {...restProps} />
+    <Select {...restProps} onChange={(param, data) => restProps.input.onChange(data.value)} />
     {touched &&
     error && (
       <div>

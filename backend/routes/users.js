@@ -26,15 +26,15 @@ router.post('/', (req, res) => {
     });
 });
 
-router.get('/auth', (req, res) => {
-  Users.find({
-    email: req.params.email,
-    password: req.params.password
+router.put('/auth', (req, res) => {
+  Users.findOne({
+    email: req.body.email,
+    password: req.body.password
   }, 'token', (err, users) => {
-    if (err) {
+    if (err || !users) {
       console.log(err);
-    }
-    else {
+      res.status(401).send('Incorrect login');
+    } else {
       res.json(users);
     }
   });

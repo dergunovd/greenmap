@@ -1,8 +1,8 @@
 const validate = values => {
   const errors = {};
 
-  if (!values.name) {
-    errors.name = 'Поле обязательно для заполнения';
+  if (!values.title) {
+    errors.title = 'Поле обязательно для заполнения';
   }
   if (!values.type) {
     errors.type = 'Поле обязательно для заполнения';

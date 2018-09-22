@@ -11,14 +11,34 @@ import validate from './validate';
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.state = { error: '' };
 
     this.submitHandler = values => {
       const { email, password } = values;
-      fetch(`${API_URL}/users/auth?email=${email}&password=${password}`)
-        .then(res => res.json())
+      this.setState({
+        error: ''
+      });
+      fetch(`${API_URL}/users/auth`, {
+        body: JSON.stringify({
+          email,
+          password
+        }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'PUT'
+      })
+        .then(res => res.status === 200 && res.json())
         .then(res => {
-          this.localStorage.token = res.token;
-          window.location.href = '/';
+          if (res) {
+            window.localStorage.setItem('token', res.token);
+            window.location.href = '/';
+          } else {
+            this.setState({
+              error: 'Ошибка авторизации. проверьте логин и пароль'
+            });
+          }
         });
     };
   }
@@ -30,6 +50,7 @@ class Login extends Component {
           <Grid.Column>
             <Form onSubmit={this.props.handleSubmit(this.submitHandler)}>
               <h2>Авторизация</h2>
+              {this.state.error}
               <Form.Field>
                 <Field
                   name="email"
@@ -59,6 +80,7 @@ class Login extends Component {
 Login.propTypes = {
   handleSubmit: PropTypes.func.isRequired
 };
+
 export default reduxForm({
   form: 'login',
   validate

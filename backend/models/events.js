@@ -10,12 +10,16 @@ const Events = new Schema({
     type: Number,
     required: true
   },
-  log: {
+  lon: {
     type: Number,
     required: true
   },
   type: {
     type: Number,
+    required: true
+  },
+  description: {
+    type: String,
     required: true
   },
   author: {

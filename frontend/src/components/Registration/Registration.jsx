@@ -28,7 +28,7 @@ class Registration extends Component {
       })
         .then(res => res.json())
         .then(res => {
-          this.localStorage.token = res.token;
+          window.localStorage.setItem('token', res.token);
           window.location.href = '/';
         });
     };

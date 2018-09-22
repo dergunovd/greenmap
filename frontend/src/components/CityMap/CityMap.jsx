@@ -1,36 +1,15 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { YMaps, Map, Placemark } from 'react-yandex-maps';
 import './styles.sass';
-import { Field, reduxForm } from 'redux-form';
-import { Button, Header, Form } from 'semantic-ui-react';
-import InputField from '../InputField';
-import SelectField from '../SelectField';
-import TextAreaField from '../TextAreaField';
-import validate from './validate';
+import { API_URL } from '../../config';
+import AddForm from './AddForm';
 
 const mapState = {
   controls: ['geolocationControl', 'typeSelector', 'fullscreenControl'],
   zoom: 12
 };
-const eventsTypeOptions = [
-  {
-    key: 1,
-    text: 'Облагородить территорию',
-    value: 1
-  },
-  {
-    key: 1,
-    text: 'Убрать свалку',
-    value: 2
-  },
-  {
-    key: 1,
-    text: 'Посадить дерево',
-    value: 3
-  }
-];
 
-class CityMap extends PureComponent {
+class CityMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +20,16 @@ class CityMap extends PureComponent {
     };
 
     this.clickHandler = event => {
+      if (!window.localStorage.getItem('token')) {
+        return;
+      }
+
+      if (this.state.create) {
+        this.setState({ create: false });
+
+        return;
+      }
+
       const coords = event.get('coords');
       const map = event.get('map');
       map.panTo(coords, {
@@ -54,16 +43,34 @@ class CityMap extends PureComponent {
         });
       }, 500);
     };
+
+    this.loadPoints = () => {
+      fetch(`${API_URL}/events`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'GET'
+      })
+        .then(res => res.json())
+        .then(data => this.setState({ points: data }));
+    };
   }
 
   componentWillMount() {
-    fetch('https://www.mocky.io/v2/5b8c5b582f0000a20cceebf2', {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => this.setState({ points: data }));
+    this.loadPoints();
+  }
+
+  componentWillUpdate() {
+    this.loadPoints();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextState.center !== this.state.center ||
+      nextState.coords !== this.state.coords ||
+      nextState.create !== this.state.create ||
+      nextState.points.length !== this.state.points.length
+    );
   }
 
   render() {
@@ -81,9 +88,13 @@ class CityMap extends PureComponent {
           >
             {this.state.points.map(point => (
               <Placemark
-                key={point.id}
-                geometry={{ coordinates: [point.lat, point.log] }}
-                properties={{ balloonContent: point.title }}
+                key={point._id}
+                geometry={{ coordinates: [point.lat, point.lon] }}
+                properties={{
+                  balloonContent: `<h3>${point.title}</h3><p>${
+                    point.description
+                  }</p>`
+                }}
               />
             ))}
             {this.state.create && (
@@ -98,41 +109,15 @@ class CityMap extends PureComponent {
           </Map>
         </YMaps>
         {this.state.create && (
-          <div className="create-form">
-            <Form>
-              <Header>Создать событие</Header>
-              <Form.Field>
-                <Field
-                  name="name"
-                  component={InputField}
-                  placeholder="Название события"
-                />
-              </Form.Field>
-              <Form.Field>
-                <Field
-                  name="type"
-                  component={SelectField}
-                  placeholder="Тип события"
-                  options={eventsTypeOptions}
-                />
-              </Form.Field>
-              <Form.Field>
-                <Field
-                  name="description"
-                  component={TextAreaField}
-                  placeholder="Описание события"
-                />
-              </Form.Field>
-              <Button type="submit">Добавить</Button>
-            </Form>
-          </div>
+          <AddForm
+            lat={this.state.coords[0]}
+            lon={this.state.coords[1]}
+            mapComponent={this}
+          />
         )}
       </div>
     );
   }
 }
 
-export default reduxForm({
-  form: 'createEvent',
-  validate
-})(CityMap);
+export default CityMap;
