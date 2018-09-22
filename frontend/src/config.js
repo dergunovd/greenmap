@@ -1,1 +1,1 @@
-export const API_URL = 'http://oc.dergunov.net:4000';
+export const API_URL = 'https://oc.dergunov.net:4000';
