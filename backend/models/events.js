@@ -10,12 +10,16 @@ const Events = new Schema({
     type: Number,
     required: true
   },
-  log: {
+  lon: {
     type: Number,
     required: true
   },
   type: {
     type: Number,
+    required: true
+  },
+  description: {
+    type: String,
     required: true
   },
   author: {
@@ -33,11 +37,3 @@ const Events = new Schema({
 });
 
 module.exports = mongoose.model('Events', Events);
-// {
-//   "id": "1",
-//   "title": "Обустроить детскую площадку",
-//   "lat": 51.614263,
-//   "log": 45.986176,
-//   "type": 2,
-//   "author": 1
-// },

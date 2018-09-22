@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const eventsRouter = require('./routes/events');
 
 const app = express();
 
@@ -33,6 +34,7 @@ mongoose.connect('mongodb://dergunov.net:27017/greenmap').then(
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/events', eventsRouter);
 
 
 module.exports = app;
