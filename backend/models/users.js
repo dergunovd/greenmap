@@ -10,6 +10,10 @@ const Users = new Schema({
     type: String,
     required: true
   },
+  token: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -18,6 +22,11 @@ const Users = new Schema({
     type: String,
     required: true
   },
+  role: {
+    type: Number,
+    required: true,
+    default: 1
+  }
 },{
   collection: 'users'
 });
