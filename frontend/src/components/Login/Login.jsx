@@ -14,17 +14,7 @@ class Login extends Component {
 
     this.submitHandler = values => {
       const { email, password } = values;
-      fetch(`${API_URL}/users`, {
-        body: JSON.stringify({
-          email,
-          password
-        }),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: 'POST'
-      })
+      fetch(`${API_URL}/users/auth?email=${email}&password=${password}`)
         .then(res => res.json())
         .then(res => {
           this.localStorage.token = res.token;

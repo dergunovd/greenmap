@@ -6,7 +6,7 @@ import './styles.sass';
 const Header = () => (
   <header>
     <Menu>
-      <Link to="/" className="logo">НашГород</Link>
+      <Link to="/" className="logo">GreenMap</Link>
       <Menu.Menu position="right">
         <Dropdown item icon="bars">
           <Dropdown.Menu>
